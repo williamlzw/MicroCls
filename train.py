@@ -118,9 +118,10 @@ def build_optimizer(model, lr=0.001):
                       betas=(0.5, 0.999), weight_decay=0.001)
 
 
-def build_scheduler(optimizer):
-    return optim.lr_scheduler.CosineAnnealingLR(
-        optimizer, T_max=200)
+def build_scheduler(optimizer, step_size=200, gamma=0.8):
+    scheduler = optim.lr_scheduler.StepLR(
+        optimizer, step_size=step_size, gamma=gamma)
+    return scheduler
 
 
 def build_dataloader(batch_size):
@@ -184,21 +185,21 @@ def load_model(model_path, model):
 
 def main():
     parser = argparse.ArgumentParser(description='MicroCls')
-    parser.add_argument('--model_path', default='save_model/micro_nh256_depth2_best_rec.pth',
+    parser.add_argument('--model_path', default='',
                         help='model path')
     parser.add_argument('--model_type', default='micro',
                         help='model type', type=str)
     parser.add_argument(
-        '--nh', default=256, help='feature width, the more complex the picture background, the greater this value', type=int)
+        '--nh', default=1024, help='feature width, the more complex the picture background, the greater this value', type=int)
     parser.add_argument(
         '--depth', default=2, help='depth, the greater the number of samples, the greater this value', type=int)
     parser.add_argument('--lr', default=0.001,
                         help='initial learning rate', type=float)
-    parser.add_argument('--batch_size', default=100, type=int,
+    parser.add_argument('--batch_size', default=200, type=int,
                         help='batch size')
     parser.add_argument('--workers', default=0,
                         help='number of data loading workers', type=int)
-    parser.add_argument('--epochs', default=300,
+    parser.add_argument('--epochs', default=500,
                         help='number of total epochs', type=int)
     parser.add_argument('--display_interval', default=50,
                         help='display interval', type=int)

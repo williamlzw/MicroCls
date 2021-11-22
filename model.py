@@ -67,6 +67,6 @@ if __name__ == '__main__':
     out = model(x)
     t1 = time.time()
     print(out.shape, (t1-t0)*1000)
-    torch.save(model, 'micro.pth')
-    # from torchsummaryX import summary
-    # summary(model, x)
+    #torch.save(model, 'micro.pth')
+    from torchsummaryX import summary
+    summary(model, x)
